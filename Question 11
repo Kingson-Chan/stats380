@@ -1,0 +1,21 @@
+getPortYear <- function(port_name, year_value) {
+  # Check if the port exists in the data
+  if (!port_name %in% passengers$port) {
+    # If the port does not exist, return an empty data frame
+    empty_df <- data.frame(citizenship = character(0), year = integer(0))
+    return(empty_df)
+  }
+  
+  # Filter for the inputted port and year
+  # Always exclude Total
+  result <- subset(passengers, port == port_name & year == year_value & citizenship != "Total")
+
+  # Select citizenship and count
+  result <- result[, c("citizenship", "count")]
+  
+  # Rename the count column to inputted year
+  colnames(result)[2] <- as.character(year_value)
+  
+  # Return
+  return(result)
+}
