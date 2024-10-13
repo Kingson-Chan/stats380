@@ -1,6 +1,36 @@
+###---------------------------------Purpose--------------------------------
+###-Filter data base on requested port and year, excluding aggregated data-
+###------------------------------------------------------------------------
+
+###-------------------------------Return------------------------------
+###-A dataframe with "citizenship" and "count" for the requested year-
+###------Empty data frame if port not exist or year out of range------
+###-------------------------------------------------------------------
+
+###----------------------------Assumption-----------------------------
+###-------"passenger-counts.csv" is read and named as "passengers"----
+###-----------"passengers" is a globally available data frame---------
+###-----------inputs are in the format (port_name, year_value)--------
+###-------------------------------------------------------------------
+
+###---------------------------limitation----------------------------------
+###-cannot handle cases where the "passengers" is not available globally--
+###-----------------------------------------------------------------------
+
 getPortYear <- function(port_name, year_value) {
-  # Check if the port exists in the data
-  if (!port_name %in% passengers$port) {
+  # Check if inputs are valid
+  # Check whether port_name is a string, if not return warning
+  if (!is.character(port_name) || length(port_name) != 1) {
+    stop("Invalid input! port must be a string .")
+  }
+  
+  # Check whether year_value is a string, if not return warning
+  if (!is.numeric(year_value) || length(year_value) != 1) {
+    stop("Invalid input! year must be a numeric value.")
+  }
+  
+  # Check if the port and year exists in the data
+  if (!port_name %in% passengers$port | !year_value %in% passengers$year){
     # If the port does not exist, return an empty data frame
     empty_df <- data.frame(citizenship = character(0), year = integer(0))
     return(empty_df)
